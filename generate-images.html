@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Placeholder Images</title>
+</head>
+<body>
+    <h1>Image Generator for Toddler Learning Site</h1>
+    <p>This page generates colorful SVG images for the learning website.</p>
+    <div id="output"></div>
+    
+    <script>
+        // Alphabet images
+        const alphabetImages = {
+            'A': { text: '🍎', bg: '#ff6b6b', label: 'Apple' },
+            'B': { text: '⚽', bg: '#4ecdc4', label: 'Ball' },
+            'C': { text: '🐱', bg: '#ffd93d', label: 'Cat' },
+            'D': { text: '🐕', bg: '#6bcf7f', label: 'Dog' },
+            'E': { text: '🐘', bg: '#a8dadc', label: 'Elephant' },
+            'F': { text: '🐟', bg: '#457b9d', label: 'Fish' },
+            'G': { text: '🍇', bg: '#9d4edd', label: 'Grapes' },
+            'H': { text: '🎩', bg: '#ff6b6b', label: 'Hat' },
+            'I': { text: '🍦', bg: '#f4a261', label: 'Ice cream' },
+            'J': { text: '🍮', bg: '#e76f51', label: 'Jelly' },
+            'K': { text: '🪁', bg: '#2a9d8f', label: 'Kite' },
+            'L': { text: '🦁', bg: '#e9c46a', label: 'Lion' },
+            'M': { text: '🌙', bg: '#264653', label: 'Moon' },
+            'N': { text: '🪹', bg: '#8b5a3c', label: 'Nest' },
+            'O': { text: '🍊', bg: '#f4a261', label: 'Orange' },
+            'P': { text: '🐧', bg: '#457b9d', label: 'Penguin' },
+            'Q': { text: '👸', bg: '#e63946', label: 'Queen' },
+            'R': { text: '🌈', bg: '#a8dadc', label: 'Rainbow' },
+            'S': { text: '☀️', bg: '#ffd60a', label: 'Sun' },
+            'T': { text: '🌳', bg: '#2d6a4f', label: 'Tree' },
+            'U': { text: '☂️', bg: '#7209b7', label: 'Umbrella' },
+            'V': { text: '🎻', bg: '#b5838d', label: 'Violin' },
+            'W': { text: '🍉', bg: '#e63946', label: 'Watermelon' },
+            'X': { text: '🎹', bg: '#6d597a', label: 'Xylophone' },
+            'Y': { text: '⛵', bg: '#0077b6', label: 'Yacht' },
+            'Z': { text: '🦓', bg: '#000000', label: 'Zebra' }
+        };
+
+        // Spelling word images
+        const spellingImages = {
+            'cat': { text: '🐱', bg: '#ffd93d' },
+            'dog': { text: '🐕', bg: '#6bcf7f' },
+            'sun': { text: '☀️', bg: '#ffd60a' },
+            'ball': { text: '⚽', bg: '#4ecdc4' },
+            'book': { text: '📚', bg: '#e76f51' },
+            'tree': { text: '🌳', bg: '#2d6a4f' },
+            'star': { text: '⭐', bg: '#f72585' },
+            'fish': { text: '🐟', bg: '#457b9d' },
+            'bird': { text: '🐦', bg: '#4cc9f0' },
+            'cake': { text: '🎂', bg: '#f4a261' }
+        };
+
+        function createSVG(emoji, bgColor, size = 200) {
+            return `
+<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${size}" height="${size}" fill="${bgColor}" rx="20"/>
+    <text x="50%" y="50%" font-size="${size * 0.6}" text-anchor="middle" dominant-baseline="central">${emoji}</text>
+</svg>`;
+        }
+
+        // Generate and display all images
+        const output = document.getElementById('output');
+        
+        // Generate alphabet images
+        for (let letter in alphabetImages) {
+            const data = alphabetImages[letter];
+            const svg = createSVG(data.text, data.bg);
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${letter.toLowerCase()}.svg`;
+            link.textContent = `Download ${letter} - ${data.label}`;
+            link.style.display = 'block';
+            link.style.margin = '10px';
+            output.appendChild(link);
+        }
+        
+        // Generate spelling images
+        output.appendChild(document.createElement('hr'));
+        const spellingTitle = document.createElement('h2');
+        spellingTitle.textContent = 'Spelling Words';
+        output.appendChild(spellingTitle);
+        
+        for (let word in spellingImages) {
+            const data = spellingImages[word];
+            const svg = createSVG(data.text, data.bg);
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${word}.svg`;
+            link.textContent = `Download ${word}`;
+            link.style.display = 'block';
+            link.style.margin = '10px';
+            output.appendChild(link);
+        }
+    </script>
+</body>
+</html>
