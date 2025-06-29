@@ -59,68 +59,74 @@ let selectedColors = [];
 let mixedColor = null;
 let mixingMode = 'simple'; // 'simple' or 'advanced'
 let maxColors = 2;
+
+// Interactive Storybooks variables
+let currentStory = null;
+let currentPage = 0;
+let isAutoReading = false;
+let storyAutoTimer = null;
 let colorMixingData = {
     // Primary + Primary combinations
-    'red+blue': { color: '#8b4bff', name: 'Purple' },
-    'blue+red': { color: '#8b4bff', name: 'Purple' },
-    'red+yellow': { color: '#ff8c42', name: 'Orange' },
-    'yellow+red': { color: '#ff8c42', name: 'Orange' },
-    'blue+yellow': { color: '#4caf50', name: 'Green' },
-    'yellow+blue': { color: '#4caf50', name: 'Green' },
+    'red+blue': { color: '#8b4bff', name: 'Magical Purple' },
+    'blue+red': { color: '#8b4bff', name: 'Magical Purple' },
+    'red+yellow': { color: '#ff8c42', name: 'Sunset Orange' },
+    'yellow+red': { color: '#ff8c42', name: 'Sunset Orange' },
+    'blue+yellow': { color: '#4caf50', name: 'Forest Green' },
+    'yellow+blue': { color: '#4caf50', name: 'Forest Green' },
     
     // Adding White (tints - lighter colors)
-    'red+white': { color: '#ffb3ba', name: 'Pink' },
-    'white+red': { color: '#ffb3ba', name: 'Pink' },
-    'blue+white': { color: '#bae1ff', name: 'Light Blue' },
-    'white+blue': { color: '#bae1ff', name: 'Light Blue' },
-    'yellow+white': { color: '#ffffba', name: 'Light Yellow' },
-    'white+yellow': { color: '#ffffba', name: 'Light Yellow' },
-    'purple+white': { color: '#ddbeff', name: 'Lavender' },
-    'white+purple': { color: '#ddbeff', name: 'Lavender' },
-    'orange+white': { color: '#ffdab9', name: 'Peach' },
-    'white+orange': { color: '#ffdab9', name: 'Peach' },
-    'green+white': { color: '#bffcc6', name: 'Light Green' },
-    'white+green': { color: '#bffcc6', name: 'Light Green' },
+    'red+white': { color: '#ffb3ba', name: 'Cotton Candy Pink' },
+    'white+red': { color: '#ffb3ba', name: 'Cotton Candy Pink' },
+    'blue+white': { color: '#bae1ff', name: 'Sky Blue' },
+    'white+blue': { color: '#bae1ff', name: 'Sky Blue' },
+    'yellow+white': { color: '#ffffba', name: 'Sunshine Yellow' },
+    'white+yellow': { color: '#ffffba', name: 'Sunshine Yellow' },
+    'purple+white': { color: '#ddbeff', name: 'Fairy Lavender' },
+    'white+purple': { color: '#ddbeff', name: 'Fairy Lavender' },
+    'orange+white': { color: '#ffdab9', name: 'Peach Cream' },
+    'white+orange': { color: '#ffdab9', name: 'Peach Cream' },
+    'green+white': { color: '#bffcc6', name: 'Mint Fresh' },
+    'white+green': { color: '#bffcc6', name: 'Mint Fresh' },
     
     // Adding Black (shades - darker colors)
-    'red+black': { color: '#8b0000', name: 'Dark Red' },
-    'black+red': { color: '#8b0000', name: 'Dark Red' },
-    'blue+black': { color: '#191970', name: 'Dark Blue' },
-    'black+blue': { color: '#191970', name: 'Dark Blue' },
-    'yellow+black': { color: '#9acd32', name: 'Olive' },
-    'black+yellow': { color: '#9acd32', name: 'Olive' },
-    'purple+black': { color: '#4b0082', name: 'Dark Purple' },
-    'black+purple': { color: '#4b0082', name: 'Dark Purple' },
-    'orange+black': { color: '#ff4500', name: 'Dark Orange' },
-    'black+orange': { color: '#ff4500', name: 'Dark Orange' },
-    'green+black': { color: '#006400', name: 'Dark Green' },
-    'black+green': { color: '#006400', name: 'Dark Green' },
+    'red+black': { color: '#8b0000', name: 'Dragon Red' },
+    'black+red': { color: '#8b0000', name: 'Dragon Red' },
+    'blue+black': { color: '#191970', name: 'Midnight Blue' },
+    'black+blue': { color: '#191970', name: 'Midnight Blue' },
+    'yellow+black': { color: '#9acd32', name: 'Army Green' },
+    'black+yellow': { color: '#9acd32', name: 'Army Green' },
+    'purple+black': { color: '#4b0082', name: 'Royal Purple' },
+    'black+purple': { color: '#4b0082', name: 'Royal Purple' },
+    'orange+black': { color: '#ff4500', name: 'Tiger Orange' },
+    'black+orange': { color: '#ff4500', name: 'Tiger Orange' },
+    'green+black': { color: '#006400', name: 'Jungle Green' },
+    'black+green': { color: '#006400', name: 'Jungle Green' },
     
     // Secondary + Primary combinations (more advanced)
-    'purple+yellow': { color: '#8b4513', name: 'Brown' },
-    'yellow+purple': { color: '#8b4513', name: 'Brown' },
-    'orange+blue': { color: '#708090', name: 'Gray' },
-    'blue+orange': { color: '#708090', name: 'Gray' },
-    'green+red': { color: '#a0522d', name: 'Brown' },
-    'red+green': { color: '#a0522d', name: 'Brown' },
+    'purple+yellow': { color: '#8b4513', name: 'Chocolate Brown' },
+    'yellow+purple': { color: '#8b4513', name: 'Chocolate Brown' },
+    'orange+blue': { color: '#708090', name: 'Storm Gray' },
+    'blue+orange': { color: '#708090', name: 'Storm Gray' },
+    'green+red': { color: '#a0522d', name: 'Earth Brown' },
+    'red+green': { color: '#a0522d', name: 'Earth Brown' },
     
     // Special combinations
-    'pink+blue': { color: '#dda0dd', name: 'Lilac' },
-    'blue+pink': { color: '#dda0dd', name: 'Lilac' },
-    'pink+yellow': { color: '#f0e68c', name: 'Cream' },
-    'yellow+pink': { color: '#f0e68c', name: 'Cream' },
-    'light blue+yellow': { color: '#98fb98', name: 'Mint' },
-    'yellow+light blue': { color: '#98fb98', name: 'Mint' },
-    'orange+pink': { color: '#ff69b4', name: 'Hot Pink' },
-    'pink+orange': { color: '#ff69b4', name: 'Hot Pink' },
-    'green+blue': { color: '#008b8b', name: 'Teal' },
-    'blue+green': { color: '#008b8b', name: 'Teal' },
-    'purple+pink': { color: '#da70d6', name: 'Magenta' },
-    'pink+purple': { color: '#da70d6', name: 'Magenta' },
+    'pink+blue': { color: '#dda0dd', name: 'Princess Lilac' },
+    'blue+pink': { color: '#dda0dd', name: 'Princess Lilac' },
+    'pink+yellow': { color: '#f0e68c', name: 'Banana Cream' },
+    'yellow+pink': { color: '#f0e68c', name: 'Banana Cream' },
+    'light blue+yellow': { color: '#98fb98', name: 'Ocean Mint' },
+    'yellow+light blue': { color: '#98fb98', name: 'Ocean Mint' },
+    'orange+pink': { color: '#ff69b4', name: 'Bubblegum Pink' },
+    'pink+orange': { color: '#ff69b4', name: 'Bubblegum Pink' },
+    'green+blue': { color: '#008b8b', name: 'Mermaid Teal' },
+    'blue+green': { color: '#008b8b', name: 'Mermaid Teal' },
+    'purple+pink': { color: '#da70d6', name: 'Unicorn Magenta' },
+    'pink+purple': { color: '#da70d6', name: 'Unicorn Magenta' },
     
     // Black + White
-    'black+white': { color: '#808080', name: 'Gray' },
-    'white+black': { color: '#808080', name: 'Gray' }
+    'black+white': { color: '#808080', name: 'Elephant Gray' },
+    'white+black': { color: '#808080', name: 'Elephant Gray' }
 };
 
 // Alphabet data
@@ -360,6 +366,241 @@ const colors = [
 
 const stickers = ['🌟', '⭐', '🎈', '🎉', '❤️', '💙', '💚', '💛', '🦋', '🌈', '☀️', '🌙', '⚽', '🎨', '🎵', '🍎'];
 
+// Interactive Storybooks data
+const interactiveStories = [
+    {
+        id: 'three-bears',
+        title: 'Goldilocks and the Three Bears',
+        cover: '🐻',
+        description: 'A curious little girl discovers a house in the woods',
+        pages: [
+            {
+                text: "Once upon a time, there was a little girl named Goldilocks. She had beautiful golden hair and loved to explore.",
+                scene: {
+                    background: '#87CEEB',
+                    elements: [
+                        { type: 'emoji', content: '👧', x: 40, y: 60, size: 60, clickable: true, sound: 'Hello! I\'m Goldilocks!' },
+                        { type: 'emoji', content: '🌳', x: 20, y: 70, size: 40, clickable: true, sound: 'What a beautiful forest!' },
+                        { type: 'emoji', content: '🌳', x: 80, y: 65, size: 45, clickable: true, sound: 'So many trees to explore!' },
+                        { type: 'emoji', content: '🌸', x: 60, y: 80, size: 25, clickable: true, sound: 'Pretty flowers!' }
+                    ]
+                }
+            },
+            {
+                text: "While walking through the forest, Goldilocks found a cozy little house. She knocked on the door, but nobody answered.",
+                scene: {
+                    background: '#90EE90',
+                    elements: [
+                        { type: 'emoji', content: '🏠', x: 50, y: 45, size: 80, clickable: true, sound: 'What a lovely house!' },
+                        { type: 'emoji', content: '👧', x: 25, y: 65, size: 50, clickable: true, sound: 'Hello? Is anyone home?' },
+                        { type: 'emoji', content: '🚪', x: 50, y: 60, size: 30, clickable: true, sound: 'Knock knock!' },
+                        { type: 'emoji', content: '🌲', x: 15, y: 75, size: 35, clickable: true, sound: 'Tall pine trees!' },
+                        { type: 'emoji', content: '🌲', x: 85, y: 70, size: 40, clickable: true, sound: 'Forest sounds!' }
+                    ]
+                }
+            },
+            {
+                text: "Inside, Goldilocks saw three bowls of porridge on the table. One big bowl, one medium bowl, and one small bowl.",
+                scene: {
+                    background: '#F5DEB3',
+                    elements: [
+                        { type: 'emoji', content: '🥣', x: 25, y: 50, size: 60, clickable: true, sound: 'Papa Bear\'s big bowl!' },
+                        { type: 'emoji', content: '🥣', x: 50, y: 50, size: 45, clickable: true, sound: 'Mama Bear\'s medium bowl!' },
+                        { type: 'emoji', content: '🥣', x: 75, y: 50, size: 30, clickable: true, sound: 'Baby Bear\'s small bowl!' },
+                        { type: 'emoji', content: '👧', x: 50, y: 75, size: 50, clickable: true, sound: 'Mmm, this porridge smells good!' },
+                        { type: 'emoji', content: '🪑', x: 25, y: 70, size: 35, clickable: true, sound: 'A big chair!' },
+                        { type: 'emoji', content: '🪑', x: 75, y: 70, size: 25, clickable: true, sound: 'A small chair!' }
+                    ]
+                }
+            },
+            {
+                text: "After eating, Goldilocks felt sleepy. She found three beds upstairs. The small bed was just right!",
+                scene: {
+                    background: '#E6E6FA',
+                    elements: [
+                        { type: 'emoji', content: '🛏️', x: 25, y: 40, size: 60, clickable: true, sound: 'Papa Bear\'s big bed!' },
+                        { type: 'emoji', content: '🛏️', x: 50, y: 45, size: 45, clickable: true, sound: 'Mama Bear\'s medium bed!' },
+                        { type: 'emoji', content: '🛏️', x: 75, y: 50, size: 30, clickable: true, sound: 'Baby Bear\'s cozy bed!' },
+                        { type: 'emoji', content: '👧', x: 75, y: 65, size: 40, clickable: true, sound: 'Zzz... so comfortable!' },
+                        { type: 'emoji', content: '🌙', x: 15, y: 20, size: 35, clickable: true, sound: 'Sleepy time!' },
+                        { type: 'emoji', content: '⭐', x: 85, y: 25, size: 25, clickable: true, sound: 'Twinkle twinkle!' }
+                    ]
+                }
+            },
+            {
+                text: "Suddenly, the three bears came home! Goldilocks woke up and saw them. She jumped out of bed and ran home safely. The end!",
+                scene: {
+                    background: '#FFB6C1',
+                    elements: [
+                        { type: 'emoji', content: '🐻', x: 20, y: 60, size: 60, clickable: true, sound: 'Papa Bear says: Someone\'s been here!' },
+                        { type: 'emoji', content: '🐻', x: 50, y: 65, size: 45, clickable: true, sound: 'Mama Bear says: Who ate our porridge?' },
+                        { type: 'emoji', content: '🐻', x: 80, y: 70, size: 30, clickable: true, sound: 'Baby Bear says: Someone slept in my bed!' },
+                        { type: 'emoji', content: '👧', x: 15, y: 40, size: 40, clickable: true, sound: 'Oh my! I better go home!' },
+                        { type: 'emoji', content: '🏃‍♀️', x: 85, y: 40, size: 35, clickable: true, sound: 'Running home safely!' },
+                        { type: 'emoji', content: '🏠', x: 85, y: 15, size: 30, clickable: true, sound: 'Home sweet home!' }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: 'little-duck',
+        title: 'The Little Yellow Duck',
+        cover: '🦆',
+        description: 'A little duck goes on an adventure at the pond',
+        pages: [
+            {
+                text: "Once there was a little yellow duck who lived by a beautiful blue pond with her family.",
+                scene: {
+                    background: '#ADD8E6',
+                    elements: [
+                        { type: 'emoji', content: '🦆', x: 50, y: 60, size: 50, clickable: true, sound: 'Quack quack! I\'m a little duck!' },
+                        { type: 'emoji', content: '🦆', x: 30, y: 65, size: 40, clickable: true, sound: 'Mama Duck says hello!' },
+                        { type: 'emoji', content: '🦆', x: 70, y: 65, size: 40, clickable: true, sound: 'Papa Duck says quack!' },
+                        { type: 'emoji', content: '💧', x: 25, y: 80, size: 25, clickable: true, sound: 'Splash splash!' },
+                        { type: 'emoji', content: '💧', x: 75, y: 80, size: 25, clickable: true, sound: 'Water drops!' },
+                        { type: 'emoji', content: '🌊', x: 50, y: 85, size: 60, clickable: true, sound: 'Gentle waves!' }
+                    ]
+                }
+            },
+            {
+                text: "The little duck loved to swim and play in the water. She splashed and paddled all around the pond.",
+                scene: {
+                    background: '#87CEEB',
+                    elements: [
+                        { type: 'emoji', content: '🦆', x: 45, y: 50, size: 55, clickable: true, sound: 'Swimming is so much fun!' },
+                        { type: 'emoji', content: '💦', x: 30, y: 60, size: 30, clickable: true, sound: 'Splash!' },
+                        { type: 'emoji', content: '💦', x: 70, y: 60, size: 30, clickable: true, sound: 'Splish!' },
+                        { type: 'emoji', content: '🐸', x: 20, y: 70, size: 35, clickable: true, sound: 'Ribbit! Hello duck!' },
+                        { type: 'emoji', content: '🐟', x: 80, y: 75, size: 30, clickable: true, sound: 'Blub blub! I\'m a fish!' },
+                        { type: 'emoji', content: '🌸', x: 15, y: 40, size: 25, clickable: true, sound: 'Pretty pond flowers!' }
+                    ]
+                }
+            },
+            {
+                text: "One day, the little duck saw a beautiful butterfly. She followed it around the garden, curious and excited.",
+                scene: {
+                    background: '#98FB98',
+                    elements: [
+                        { type: 'emoji', content: '🦆', x: 40, y: 65, size: 50, clickable: true, sound: 'Where is that butterfly going?' },
+                        { type: 'emoji', content: '🦋', x: 65, y: 35, size: 40, clickable: true, sound: 'Flutter flutter! Follow me!' },
+                        { type: 'emoji', content: '🌷', x: 25, y: 75, size: 35, clickable: true, sound: 'Beautiful tulips!' },
+                        { type: 'emoji', content: '🌼', x: 75, y: 70, size: 30, clickable: true, sound: 'Daisy flowers!' },
+                        { type: 'emoji', content: '🌿', x: 15, y: 60, size: 25, clickable: true, sound: 'Green grass!' },
+                        { type: 'emoji', content: '🐛', x: 85, y: 80, size: 20, clickable: true, sound: 'A little caterpillar!' }
+                    ]
+                }
+            },
+            {
+                text: "The duck made new friends! She met a friendly frog, a colorful fish, and a busy bee. They all played together.",
+                scene: {
+                    background: '#F0E68C',
+                    elements: [
+                        { type: 'emoji', content: '🦆', x: 50, y: 50, size: 50, clickable: true, sound: 'I love having friends!' },
+                        { type: 'emoji', content: '🐸', x: 30, y: 65, size: 40, clickable: true, sound: 'Ribbit! Let\'s be friends!' },
+                        { type: 'emoji', content: '🐟', x: 70, y: 70, size: 35, clickable: true, sound: 'Swimming is fun together!' },
+                        { type: 'emoji', content: '🐝', x: 60, y: 30, size: 30, clickable: true, sound: 'Buzz buzz! Happy bee!' },
+                        { type: 'emoji', content: '🌻', x: 20, y: 40, size: 40, clickable: true, sound: 'Sunny sunflower!' },
+                        { type: 'emoji', content: '🎵', x: 80, y: 45, size: 25, clickable: true, sound: 'Music and fun!' }
+                    ]
+                }
+            },
+            {
+                text: "When the sun began to set, the little duck swam back to her family. She was happy and tired after her big adventure!",
+                scene: {
+                    background: '#FFA07A',
+                    elements: [
+                        { type: 'emoji', content: '🦆', x: 45, y: 60, size: 50, clickable: true, sound: 'Home with my family!' },
+                        { type: 'emoji', content: '🦆', x: 25, y: 65, size: 40, clickable: true, sound: 'Welcome home, little one!' },
+                        { type: 'emoji', content: '🦆', x: 65, y: 65, size: 40, clickable: true, sound: 'We missed you!' },
+                        { type: 'emoji', content: '🌅', x: 50, y: 25, size: 60, clickable: true, sound: 'Beautiful sunset!' },
+                        { type: 'emoji', content: '💤', x: 70, y: 40, size: 30, clickable: true, sound: 'Time for sleepy duck!' },
+                        { type: 'emoji', content: '❤️', x: 30, y: 40, size: 25, clickable: true, sound: 'Love and family!' }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: 'rainbow-day',
+        title: 'The Rainbow Day',
+        cover: '🌈',
+        description: 'A magical day when colors come to life',
+        pages: [
+            {
+                text: "It was a rainy morning, but then something magical happened! A beautiful rainbow appeared in the sky.",
+                scene: {
+                    background: '#E0E0E0',
+                    elements: [
+                        { type: 'emoji', content: '🌈', x: 50, y: 30, size: 80, clickable: true, sound: 'Look at all the beautiful colors!' },
+                        { type: 'emoji', content: '🌧️', x: 20, y: 60, size: 40, clickable: true, sound: 'Pitter patter rain!' },
+                        { type: 'emoji', content: '☀️', x: 80, y: 60, size: 45, clickable: true, sound: 'Sunshine after rain!' },
+                        { type: 'emoji', content: '👧', x: 45, y: 75, size: 40, clickable: true, sound: 'Wow! A rainbow!' },
+                        { type: 'emoji', content: '💧', x: 15, y: 80, size: 20, clickable: true, sound: 'Drip drop!' },
+                        { type: 'emoji', content: '🌤️', x: 30, y: 45, size: 35, clickable: true, sound: 'Partly cloudy!' }
+                    ]
+                }
+            },
+            {
+                text: "The red color jumped down from the rainbow and became a shiny red apple and a fire truck!",
+                scene: {
+                    background: '#FFE4E1',
+                    elements: [
+                        { type: 'emoji', content: '🍎', x: 35, y: 50, size: 50, clickable: true, sound: 'I\'m a red apple! Crunch crunch!' },
+                        { type: 'emoji', content: '🚒', x: 65, y: 60, size: 45, clickable: true, sound: 'Fire truck coming through!' },
+                        { type: 'emoji', content: '❤️', x: 50, y: 30, size: 40, clickable: true, sound: 'Red is the color of love!' },
+                        { type: 'emoji', content: '🌹', x: 20, y: 70, size: 35, clickable: true, sound: 'Beautiful red rose!' },
+                        { type: 'emoji', content: '🎈', x: 80, y: 35, size: 30, clickable: true, sound: 'Red balloon floating!' },
+                        { type: 'emoji', content: '🍓', x: 15, y: 45, size: 25, clickable: true, sound: 'Sweet strawberry!' }
+                    ]
+                }
+            },
+            {
+                text: "Then the blue color came down and turned into the ocean, blueberries, and a beautiful blue bird!",
+                scene: {
+                    background: '#E6F3FF',
+                    elements: [
+                        { type: 'emoji', content: '🌊', x: 50, y: 70, size: 70, clickable: true, sound: 'Blue ocean waves!' },
+                        { type: 'emoji', content: '🫐', x: 30, y: 45, size: 40, clickable: true, sound: 'Tasty blueberries!' },
+                        { type: 'emoji', content: '🐦', x: 70, y: 40, size: 45, clickable: true, sound: 'Tweet tweet! Blue bird singing!' },
+                        { type: 'emoji', content: '💎', x: 25, y: 25, size: 35, clickable: true, sound: 'Sparkling blue gem!' },
+                        { type: 'emoji', content: '🦋', x: 75, y: 25, size: 30, clickable: true, sound: 'Blue butterfly dancing!' },
+                        { type: 'emoji', content: '🐋', x: 45, y: 60, size: 40, clickable: true, sound: 'Blue whale swimming!' }
+                    ]
+                }
+            },
+            {
+                text: "The yellow color bounced down and became the bright sun, a happy banana, and golden stars!",
+                scene: {
+                    background: '#FFFACD',
+                    elements: [
+                        { type: 'emoji', content: '☀️', x: 50, y: 30, size: 60, clickable: true, sound: 'Bright yellow sunshine!' },
+                        { type: 'emoji', content: '🍌', x: 30, y: 60, size: 45, clickable: true, sound: 'Yummy yellow banana!' },
+                        { type: 'emoji', content: '⭐', x: 70, y: 50, size: 40, clickable: true, sound: 'Twinkling yellow star!' },
+                        { type: 'emoji', content: '🌻', x: 20, y: 40, size: 50, clickable: true, sound: 'Happy sunflower!' },
+                        { type: 'emoji', content: '🐤', x: 75, y: 70, size: 35, clickable: true, sound: 'Little yellow chick!' },
+                        { type: 'emoji', content: '🧀', x: 15, y: 75, size: 30, clickable: true, sound: 'Yellow cheese!' }
+                    ]
+                }
+            },
+            {
+                text: "All the colors danced together and created the most beautiful day ever! The little girl smiled and played with all the colorful friends.",
+                scene: {
+                    background: '#F0F8FF',
+                    elements: [
+                        { type: 'emoji', content: '👧', x: 50, y: 60, size: 50, clickable: true, sound: 'This is the best day ever!' },
+                        { type: 'emoji', content: '🌈', x: 50, y: 25, size: 70, clickable: true, sound: 'Rainbow magic everywhere!' },
+                        { type: 'emoji', content: '🎨', x: 25, y: 50, size: 40, clickable: true, sound: 'Colors are amazing!' },
+                        { type: 'emoji', content: '🦋', x: 75, y: 45, size: 35, clickable: true, sound: 'Dancing with colors!' },
+                        { type: 'emoji', content: '🌸', x: 30, y: 75, size: 30, clickable: true, sound: 'Colorful flowers blooming!' },
+                        { type: 'emoji', content: '✨', x: 70, y: 75, size: 25, clickable: true, sound: 'Magical sparkles!' }
+                    ]
+                }
+            }
+        ]
+    }
+];
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     initializeAlphabet();
@@ -369,6 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMemoryGame();
     initializeNurseryRhymes();
     initializeDrawing();
+    initializeStorybooks();
     showSection('alphabet');
 });
 
@@ -2150,15 +2392,22 @@ function generateColorName(colors, rgb) {
     
     if (colors.length === 3) {
         if (colorNames.includes('red') && colorNames.includes('blue') && colorNames.includes('yellow')) {
-            return 'Rainbow Mix';
+            return 'Magic Rainbow Mix';
         }
         if (colorNames.includes('red') && colorNames.includes('green') && colorNames.includes('blue')) {
-            return 'Computer Color';
+            return 'Super Power Color';
+        }
+        if (colorNames.some(name => name.includes('light')) && colorNames.length === 3) {
+            return 'Dreamy Cloud Mix';
         }
     }
     
-    if (colors.length >= 4) {
-        return `Super Mix of ${colors.length} Colors`;
+    if (colors.length === 4) {
+        return 'Amazing Four-Color Wonder';
+    }
+    
+    if (colors.length >= 5) {
+        return 'Ultimate Rainbow Creation';
     }
     
     // Analyze the resulting color
@@ -2166,36 +2415,36 @@ function generateColorName(colors, rgb) {
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     
-    // Determine dominant color
+    // Determine dominant color with creative names
     if (r > g && r > b) {
-        if (r > 200) return 'Bright Red Mix';
-        if (r > 150) return 'Red Mix';
-        return 'Dark Red Mix';
+        if (r > 200) return 'Fire Engine Red Mix';
+        if (r > 150) return 'Cherry Red Blend';
+        return 'Ruby Red Creation';
     } else if (g > r && g > b) {
-        if (g > 200) return 'Bright Green Mix';
-        if (g > 150) return 'Green Mix';
-        return 'Dark Green Mix';
+        if (g > 200) return 'Lime Green Wonder';
+        if (g > 150) return 'Grass Green Mix';
+        return 'Forest Green Blend';
     } else if (b > r && b > g) {
-        if (b > 200) return 'Bright Blue Mix';
-        if (b > 150) return 'Blue Mix';
-        return 'Dark Blue Mix';
+        if (b > 200) return 'Ocean Blue Mix';
+        if (b > 150) return 'Blueberry Blend';
+        return 'Navy Blue Creation';
     }
     
     // Check for gray/brown tones
     const colorDiff = max - min;
     if (colorDiff < 30) {
-        if (max > 180) return 'Light Gray';
-        if (max > 100) return 'Gray';
-        return 'Dark Gray';
+        if (max > 180) return 'Silver Cloud';
+        if (max > 100) return 'Elephant Gray';
+        return 'Shadow Gray';
     }
     
     // Check for specific color ranges
-    if (r > g && r > b && g > b) return 'Orange Mix';
-    if (r > b && g > b && Math.abs(r - g) < 50) return 'Yellow Mix';
-    if (g > r && b > r && Math.abs(g - b) < 50) return 'Cyan Mix';
-    if (r > g && b > g && Math.abs(r - b) < 50) return 'Magenta Mix';
+    if (r > g && r > b && g > b) return 'Pumpkin Orange Mix';
+    if (r > b && g > b && Math.abs(r - g) < 50) return 'Sunshine Yellow Mix';
+    if (g > r && b > r && Math.abs(g - b) < 50) return 'Tropical Cyan Mix';
+    if (r > g && b > g && Math.abs(r - b) < 50) return 'Unicorn Magenta Mix';
     
-    return `Custom ${colors.length}-Color Mix`;
+    return `Magical ${colors.length}-Color Creation`;
 }
 
 function startMixingAnimation() {
@@ -2683,5 +2932,318 @@ function addMixedColorToPalette(color, colorInfo) {
         colorBtn.innerHTML = '<small>🌈</small>';
         
         colorPalette.appendChild(colorBtn);
+    }
+}
+
+// Interactive Storybooks Functions
+function initializeStorybooks() {
+    const bookShelf = document.getElementById('bookShelf');
+    if (!bookShelf) return;
+    
+    bookShelf.innerHTML = '';
+    
+    interactiveStories.forEach(story => {
+        const bookCover = document.createElement('div');
+        bookCover.className = 'book-cover';
+        bookCover.onclick = () => openStory(story.id);
+        
+        bookCover.innerHTML = `
+            <div class="book-spine">
+                <div class="book-cover-emoji">${story.cover}</div>
+                <div class="book-title">${story.title}</div>
+                <div class="book-description">${story.description}</div>
+            </div>
+        `;
+        
+        bookShelf.appendChild(bookCover);
+    });
+}
+
+function openStory(storyId) {
+    currentStory = interactiveStories.find(story => story.id === storyId);
+    if (!currentStory) return;
+    
+    currentPage = 0;
+    isAutoReading = false;
+    
+    // Show story reader, hide library
+    document.getElementById('storyLibrary').style.display = 'none';
+    document.getElementById('storyReader').style.display = 'block';
+    document.getElementById('storyCompletion').style.display = 'none';
+    
+    // Update header
+    document.getElementById('currentStoryTitle').textContent = currentStory.title;
+    
+    // Load first page
+    loadStoryPage();
+    
+    // Play opening sound
+    playStorySound();
+    speak(`Let's read ${currentStory.title} together!`);
+}
+
+function loadStoryPage() {
+    if (!currentStory || currentPage >= currentStory.pages.length) return;
+    
+    const page = currentStory.pages[currentPage];
+    
+    // Update page counter
+    document.getElementById('pageCounter').textContent = 
+        `Page ${currentPage + 1} of ${currentStory.pages.length}`;
+    
+    // Update story text
+    document.getElementById('storyText').textContent = page.text;
+    
+    // Render interactive scene
+    renderStoryScene(page.scene);
+    
+    // Update navigation buttons
+    document.getElementById('prevBtn').disabled = currentPage === 0;
+    document.getElementById('nextBtn').disabled = currentPage === currentStory.pages.length - 1;
+    
+    // Update progress
+    const progress = ((currentPage + 1) / currentStory.pages.length) * 100;
+    document.getElementById('progressFillStory').style.width = progress + '%';
+    
+    // Page turn animation
+    const storyPage = document.getElementById('storyPage');
+    storyPage.style.animation = 'pageFlip 0.5s ease-in-out';
+    setTimeout(() => {
+        storyPage.style.animation = '';
+    }, 500);
+}
+
+function renderStoryScene(scene) {
+    const storyScene = document.getElementById('storyScene');
+    storyScene.innerHTML = '';
+    storyScene.style.backgroundColor = scene.background;
+    
+    scene.elements.forEach((element, index) => {
+        const sceneElement = document.createElement('div');
+        sceneElement.className = 'scene-element';
+        sceneElement.style.left = element.x + '%';
+        sceneElement.style.top = element.y + '%';
+        sceneElement.style.fontSize = element.size + 'px';
+        sceneElement.textContent = element.content;
+        sceneElement.style.transform = 'translate(-50%, -50%)';
+        sceneElement.style.position = 'absolute';
+        sceneElement.style.cursor = element.clickable ? 'pointer' : 'default';
+        sceneElement.style.userSelect = 'none';
+        sceneElement.style.transition = 'all 0.3s ease';
+        
+        if (element.clickable) {
+            sceneElement.onclick = () => playElementSound(element.sound);
+            sceneElement.onmouseover = () => {
+                sceneElement.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                sceneElement.style.filter = 'drop-shadow(0 0 10px rgba(255,255,0,0.8))';
+            };
+            sceneElement.onmouseout = () => {
+                sceneElement.style.transform = 'translate(-50%, -50%) scale(1)';
+                sceneElement.style.filter = 'none';
+            };
+        }
+        
+        // Animate elements appearing
+        sceneElement.style.opacity = '0';
+        sceneElement.style.transform += ' scale(0.1)';
+        
+        storyScene.appendChild(sceneElement);
+        
+        // Stagger animations
+        setTimeout(() => {
+            sceneElement.style.opacity = '1';
+            sceneElement.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, index * 200);
+    });
+}
+
+function playElementSound(soundText) {
+    speak(soundText);
+    playSound('ding');
+    
+    // Add sparkle effect
+    createSparkleEffect(event.target);
+}
+
+function createSparkleEffect(element) {
+    const rect = element.getBoundingClientRect();
+    
+    for (let i = 0; i < 5; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.textContent = '✨';
+        sparkle.style.position = 'fixed';
+        sparkle.style.left = rect.left + rect.width/2 + 'px';
+        sparkle.style.top = rect.top + rect.height/2 + 'px';
+        sparkle.style.fontSize = '20px';
+        sparkle.style.pointerEvents = 'none';
+        sparkle.style.zIndex = '10000';
+        sparkle.style.animation = `sparkleFloat ${1 + Math.random()}s ease-out forwards`;
+        
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+            if (sparkle.parentNode) {
+                sparkle.parentNode.removeChild(sparkle);
+            }
+        }, 1500);
+    }
+}
+
+function nextPage() {
+    if (!currentStory || currentPage >= currentStory.pages.length - 1) return;
+    
+    currentPage++;
+    loadStoryPage();
+    playPageTurnSound();
+    
+    if (currentPage === currentStory.pages.length - 1) {
+        setTimeout(() => {
+            completeStory();
+        }, 3000);
+    }
+}
+
+function previousPage() {
+    if (!currentStory || currentPage <= 0) return;
+    
+    currentPage--;
+    loadStoryPage();
+    playPageTurnSound();
+}
+
+function readCurrentPage() {
+    if (!currentStory) return;
+    
+    const page = currentStory.pages[currentPage];
+    speak(page.text);
+    playStorySound();
+}
+
+function toggleAutoRead() {
+    isAutoReading = !isAutoReading;
+    const autoBtn = document.getElementById('autoBtn');
+    
+    if (isAutoReading) {
+        autoBtn.innerHTML = '⏸️ Pause';
+        startAutoReading();
+    } else {
+        autoBtn.innerHTML = '▶️ Auto Play';
+        stopAutoReading();
+    }
+}
+
+function startAutoReading() {
+    if (!currentStory || !isAutoReading) return;
+    
+    readCurrentPage();
+    
+    // Auto advance after 8 seconds
+    storyAutoTimer = setTimeout(() => {
+        if (isAutoReading && currentPage < currentStory.pages.length - 1) {
+            nextPage();
+            startAutoReading();
+        } else if (currentPage === currentStory.pages.length - 1) {
+            completeStory();
+        }
+    }, 8000);
+}
+
+function stopAutoReading() {
+    if (storyAutoTimer) {
+        clearTimeout(storyAutoTimer);
+        storyAutoTimer = null;
+    }
+}
+
+function completeStory() {
+    stopAutoReading();
+    
+    // Show completion screen
+    document.getElementById('storyReader').style.display = 'none';
+    document.getElementById('storyCompletion').style.display = 'block';
+    
+    // Update completion message
+    document.getElementById('completionMessage').textContent = 
+        `Wonderful! You finished reading "${currentStory.title}"! You're becoming a great reader!`;
+    
+    // Play celebration
+    playCelebrationSound();
+    speak(`Hooray! You finished the story! That was amazing reading!`);
+    
+    // Show celebration
+    setTimeout(() => {
+        showCelebration(`Story Complete! 📚`);
+    }, 1000);
+}
+
+function restartStory() {
+    currentPage = 0;
+    isAutoReading = false;
+    stopAutoReading();
+    
+    document.getElementById('storyCompletion').style.display = 'none';
+    document.getElementById('storyReader').style.display = 'block';
+    
+    loadStoryPage();
+    speak(`Let's read ${currentStory.title} again!`);
+}
+
+function backToLibrary() {
+    stopAutoReading();
+    currentStory = null;
+    currentPage = 0;
+    isAutoReading = false;
+    
+    document.getElementById('storyReader').style.display = 'none';
+    document.getElementById('storyCompletion').style.display = 'none';
+    document.getElementById('storyLibrary').style.display = 'block';
+    
+    speak('Choose another story to read!');
+}
+
+function playStorySound() {
+    // Create gentle story reading sound
+    if (musicContext) {
+        const oscillator = musicContext.createOscillator();
+        const gainNode = musicContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(musicContext.destination);
+        
+        oscillator.frequency.setValueAtTime(220, musicContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(330, musicContext.currentTime + 0.5);
+        
+        gainNode.gain.setValueAtTime(0.05, musicContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, musicContext.currentTime + 0.5);
+        
+        oscillator.type = 'sine';
+        oscillator.start(musicContext.currentTime);
+        oscillator.stop(musicContext.currentTime + 0.5);
+    }
+}
+
+function playPageTurnSound() {
+    // Create page turning sound effect
+    if (musicContext) {
+        const oscillator = musicContext.createOscillator();
+        const gainNode = musicContext.createGain();
+        const filter = musicContext.createBiquadFilter();
+        
+        oscillator.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(musicContext.destination);
+        
+        oscillator.frequency.setValueAtTime(800, musicContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, musicContext.currentTime + 0.3);
+        
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1000, musicContext.currentTime);
+        
+        gainNode.gain.setValueAtTime(0.08, musicContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, musicContext.currentTime + 0.3);
+        
+        oscillator.type = 'sawtooth';
+        oscillator.start(musicContext.currentTime);
+        oscillator.stop(musicContext.currentTime + 0.3);
     }
 }

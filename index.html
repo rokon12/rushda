@@ -39,6 +39,10 @@
                     <span class="icon">🎨</span>
                     <span>Draw</span>
                 </button>
+                <button class="nav-btn" onclick="showSection('stories')">
+                    <span class="icon">📚</span>
+                    <span>Stories</span>
+                </button>
             </nav>
         </header>
 
@@ -313,8 +317,9 @@
                         Choose colors and start drawing! 🎨
                     </div>
                 </div>
-                
-                <div class="color-mixing-panel" id="colorMixingPanel" style="display: none;">
+            </div>
+            
+            <div class="color-mixing-panel" id="colorMixingPanel" style="display: none;">
                     <h3>Mix Colors Together!</h3>
                     <div class="mixing-explanation" id="mixingExplanation">
                         Choose 2 or more colors to mix together! 🌈
@@ -446,6 +451,81 @@
                     <h3>Add Stickers:</h3>
                     <div class="stickers" id="stickers">
                         <!-- Stickers will be generated -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Storybooks Section -->
+        <section id="stories" class="learning-section">
+            <h2>Interactive Storybooks!</h2>
+            <div class="storybooks-container">
+                <!-- Story Selection Screen -->
+                <div class="story-library" id="storyLibrary">
+                    <h3>Choose a Story to Read!</h3>
+                    <div class="book-shelf" id="bookShelf">
+                        <!-- Story books will be generated -->
+                    </div>
+                </div>
+                
+                <!-- Story Reading Interface -->
+                <div class="story-reader" id="storyReader" style="display: none;">
+                    <div class="story-header">
+                        <button class="back-to-library-btn" onclick="backToLibrary()">
+                            ← Back to Library
+                        </button>
+                        <div class="story-title" id="currentStoryTitle">Story Title</div>
+                        <div class="page-counter" id="pageCounter">Page 1 of 5</div>
+                    </div>
+                    
+                    <div class="story-book">
+                        <div class="story-page" id="storyPage">
+                            <div class="story-scene" id="storyScene">
+                                <!-- Interactive story scene will be rendered here -->
+                            </div>
+                            <div class="story-text" id="storyText">
+                                Story text will appear here...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-controls">
+                        <button class="story-nav-btn prev-btn" onclick="previousPage()" id="prevBtn" disabled>
+                            ← Previous
+                        </button>
+                        <button class="story-control-btn read-btn" onclick="readCurrentPage()" id="readBtn">
+                            🔊 Read to Me
+                        </button>
+                        <button class="story-control-btn auto-btn" onclick="toggleAutoRead()" id="autoBtn">
+                            ▶️ Auto Play
+                        </button>
+                        <button class="story-nav-btn next-btn" onclick="nextPage()" id="nextBtn">
+                            Next →
+                        </button>
+                    </div>
+                    
+                    <div class="story-progress">
+                        <div class="progress-bar-story">
+                            <div class="progress-fill-story" id="progressFillStory"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story Completion Celebration -->
+                <div class="story-completion" id="storyCompletion" style="display: none;">
+                    <div class="completion-content">
+                        <h3>🎉 Story Complete! 🎉</h3>
+                        <div class="completion-message" id="completionMessage">
+                            Great job reading the story!
+                        </div>
+                        <div class="completion-actions">
+                            <button class="completion-btn" onclick="restartStory()">
+                                🔄 Read Again
+                            </button>
+                            <button class="completion-btn" onclick="backToLibrary()">
+                                📚 Choose New Story
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
