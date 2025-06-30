@@ -60,6 +60,11 @@ let mixedColor = null;
 let mixingMode = 'simple'; // 'simple' or 'advanced'
 let maxColors = 2;
 
+// Arabic letters variables
+let currentArabicLetter = 'أ';
+let arabicGameScore = 0;
+let arabicGameActive = false;
+
 // Interactive Storybooks variables
 let currentStory = null;
 let currentPage = 0;
@@ -162,6 +167,353 @@ let currentVowel = 'a';
 let currentConsonant = 'B';
 let phonicsScore = 0;
 let phonicsGameActive = false;
+
+// Bangla alphabet data with proper Bengali letter names
+const banglaAlphabet = {
+    vowels: {
+        'অ': { 
+            pronunciation: 'o', 
+            letterName: 'অ', 
+            word: 'অজগর', 
+            meaning: 'Ojgor (Python)', 
+            english: 'A' 
+        },
+        'আ': { 
+            pronunciation: 'aa', 
+            letterName: 'আ', 
+            word: 'আম', 
+            meaning: 'Aam (Mango)', 
+            english: 'Aa' 
+        },
+        'ই': { 
+            pronunciation: 'i', 
+            letterName: 'ই', 
+            word: 'ইঁদুর', 
+            meaning: 'Indur (Mouse)', 
+            english: 'I' 
+        },
+        'ঈ': { 
+            pronunciation: 'ii', 
+            letterName: 'ঈ', 
+            word: 'ঈগল', 
+            meaning: 'Igol (Eagle)', 
+            english: 'Ee' 
+        },
+        'উ': { 
+            pronunciation: 'u', 
+            letterName: 'উ', 
+            word: 'উট', 
+            meaning: 'Ut (Camel)', 
+            english: 'U' 
+        },
+        'ঊ': { 
+            pronunciation: 'uu', 
+            letterName: 'ঊ', 
+            word: 'ঊর্ণা', 
+            meaning: 'Urna (Wool)', 
+            english: 'Oo' 
+        },
+        'ঋ': { 
+            pronunciation: 'ri', 
+            letterName: 'ঋ', 
+            word: 'ঋতু', 
+            meaning: 'Ritu (Season)', 
+            english: 'Ri' 
+        },
+        'এ': { 
+            pronunciation: 'e', 
+            letterName: 'এ', 
+            word: 'এলাচ', 
+            meaning: 'Elach (Cardamom)', 
+            english: 'E' 
+        },
+        'ঐ': { 
+            pronunciation: 'oi', 
+            letterName: 'ঐ', 
+            word: 'ঐরাবত', 
+            meaning: 'Oirabat (Airavata)', 
+            english: 'Oi' 
+        },
+        'ও': { 
+            pronunciation: 'o', 
+            letterName: 'ও', 
+            word: 'ওল', 
+            meaning: 'Ol (Yam)', 
+            english: 'O' 
+        },
+        'ঔ': { 
+            pronunciation: 'ou', 
+            letterName: 'ঔ', 
+            word: 'ঔষধ', 
+            meaning: 'Oushod (Medicine)', 
+            english: 'Ou' 
+        }
+    },
+    consonants: {
+        'ক': { 
+            pronunciation: 'ko', 
+            letterName: 'ক', 
+            word: 'কলা', 
+            meaning: 'Kola (Banana)', 
+            english: 'K' 
+        },
+        'খ': { 
+            pronunciation: 'kho', 
+            letterName: 'খ', 
+            word: 'খরগোশ', 
+            meaning: 'Khorgosh (Rabbit)', 
+            english: 'Kh' 
+        },
+        'গ': { 
+            pronunciation: 'go', 
+            letterName: 'গ', 
+            word: 'গরু', 
+            meaning: 'Goru (Cow)', 
+            english: 'G' 
+        },
+        'ঘ': { 
+            pronunciation: 'gho', 
+            letterName: 'ঘ', 
+            word: 'ঘর', 
+            meaning: 'Ghor (House)', 
+            english: 'Gh' 
+        },
+        'ঙ': { 
+            pronunciation: 'umo', 
+            letterName: 'ঙ', 
+            word: 'উঙ্গুর', 
+            meaning: 'Ungur (Grapes)', 
+            english: 'Ng' 
+        },
+        'চ': { 
+            pronunciation: 'cho', 
+            letterName: 'চ', 
+            word: 'চাঁদ', 
+            meaning: 'Chand (Moon)', 
+            english: 'Ch' 
+        },
+        'ছ': { 
+            pronunciation: 'chho', 
+            letterName: 'ছ', 
+            word: 'ছাগল', 
+            meaning: 'Chagol (Goat)', 
+            english: 'Chh' 
+        },
+        'জ': { 
+            pronunciation: 'jo', 
+            letterName: 'জ', 
+            word: 'জল', 
+            meaning: 'Jol (Water)', 
+            english: 'J' 
+        },
+        'ঝ': { 
+            pronunciation: 'jho', 
+            letterName: 'ঝ', 
+            word: 'ঝরনা', 
+            meaning: 'Jhorna (Waterfall)', 
+            english: 'Jh' 
+        },
+        'ঞ': { 
+            pronunciation: 'ino', 
+            letterName: 'ঞ', 
+            word: 'গঞ্জ', 
+            meaning: 'Gonj (Market)', 
+            english: 'Ny' 
+        },
+        'ট': { 
+            pronunciation: 'to', 
+            letterName: 'ট', 
+            word: 'টমেটো', 
+            meaning: 'Tomato', 
+            english: 'T' 
+        },
+        'ঠ': { 
+            pronunciation: 'tho', 
+            letterName: 'ঠ', 
+            word: 'ঠেলা', 
+            meaning: 'Thela', 
+            english: 'Th' 
+        },
+        'ড': { 
+            pronunciation: 'do', 
+            letterName: 'ড', 
+            word: 'ডিম', 
+            meaning: 'Dim (Egg)', 
+            english: 'D' 
+        },
+        'ঢ': { 
+            pronunciation: 'dho', 
+            letterName: 'ঢ', 
+            word: 'ঢাক', 
+            meaning: 'Dhak (Drum)', 
+            english: 'Dh' 
+        },
+        'ণ': { 
+            pronunciation: 'no', 
+            letterName: 'ণ', 
+            word: 'বাণী', 
+            meaning: 'Bani (Speech)', 
+            english: 'N' 
+        },
+        'ত': { 
+            pronunciation: 'to', 
+            letterName: 'ত', 
+            word: 'তারা', 
+            meaning: 'Tara (Star)', 
+            english: 'T' 
+        },
+        'থ': { 
+            pronunciation: 'tho', 
+            letterName: 'থ', 
+            word: 'থালা', 
+            meaning: 'Thala (Plate)', 
+            english: 'Th' 
+        },
+        'দ': { 
+            pronunciation: 'do', 
+            letterName: 'দ', 
+            word: 'দাঁত', 
+            meaning: 'Dant (Teeth)', 
+            english: 'D' 
+        },
+        'ধ': { 
+            pronunciation: 'dho', 
+            letterName: 'ধ', 
+            word: 'ধান', 
+            meaning: 'Dhan (Rice)', 
+            english: 'Dh' 
+        },
+        'ন': { 
+            pronunciation: 'no', 
+            letterName: 'ন', 
+            word: 'নৌকা', 
+            meaning: 'Nouka (Boat)', 
+            english: 'N' 
+        },
+        'প': { 
+            pronunciation: 'po', 
+            letterName: 'প', 
+            word: 'পাখি', 
+            meaning: 'Pakhi (Bird)', 
+            english: 'P' 
+        },
+        'ফ': { 
+            pronunciation: 'pho', 
+            letterName: 'ফ', 
+            word: 'ফুল', 
+            meaning: 'Phul (Flower)', 
+            english: 'Ph' 
+        },
+        'ব': { 
+            pronunciation: 'bo', 
+            letterName: 'ব', 
+            word: 'বই', 
+            meaning: 'Boi (Book)', 
+            english: 'B' 
+        },
+        'ভ': { 
+            pronunciation: 'bho', 
+            letterName: 'ভ', 
+            word: 'ভালুক', 
+            meaning: 'Bhaluk (Bear)', 
+            english: 'Bh' 
+        },
+        'ম': { 
+            pronunciation: 'mo', 
+            letterName: 'ম', 
+            word: 'মাছ', 
+            meaning: 'Mach (Fish)', 
+            english: 'M' 
+        },
+        'য': { 
+            pronunciation: 'jo', 
+            letterName: 'য', 
+            word: 'যন্ত্র', 
+            meaning: 'Jontro (Machine)', 
+            english: 'Y' 
+        },
+        'র': { 
+            pronunciation: 'ro', 
+            letterName: 'র', 
+            word: 'রং', 
+            meaning: 'Rong (Color)', 
+            english: 'R' 
+        },
+        'ল': { 
+            pronunciation: 'lo', 
+            letterName: 'ল', 
+            word: 'লাল', 
+            meaning: 'Lal (Red)', 
+            english: 'L' 
+        },
+        'শ': { 
+            pronunciation: 'sho', 
+            letterName: 'শ', 
+            word: 'শাক', 
+            meaning: 'Shak (Vegetables)', 
+            english: 'Sh' 
+        },
+        'ষ': { 
+            pronunciation: 'sho', 
+            letterName: 'ষ', 
+            word: 'ষাঁড়', 
+            meaning: 'Shar (Bull)', 
+            english: 'Sh' 
+        },
+        'স': { 
+            pronunciation: 'so', 
+            letterName: 'স', 
+            word: 'সূর্য', 
+            meaning: 'Surjo (Sun)', 
+            english: 'S' 
+        },
+        'হ': { 
+            pronunciation: 'ho', 
+            letterName: 'হ', 
+            word: 'হাতি', 
+            meaning: 'Hathi (Elephant)', 
+            english: 'H' 
+        }
+    }
+};
+
+// Arabic alphabet data
+const arabicAlphabet = {
+    'أ': { pronunciation: 'alif', letterName: 'أ', word: 'أسد', meaning: 'Asad (Lion)', english: 'A' },
+    'ب': { pronunciation: 'ba', letterName: 'ب', word: 'بطة', meaning: 'Batta (Duck)', english: 'B' },
+    'ت': { pronunciation: 'ta', letterName: 'ت', word: 'تفاحة', meaning: 'Tuffaha (Apple)', english: 'T' },
+    'ث': { pronunciation: 'tha', letterName: 'ث', word: 'ثعلب', meaning: 'Thalab (Fox)', english: 'Th' },
+    'ج': { pronunciation: 'jeem', letterName: 'ج', word: 'جمل', meaning: 'Jamal (Camel)', english: 'J' },
+    'ح': { pronunciation: 'ha', letterName: 'ح', word: 'حصان', meaning: 'Hisan (Horse)', english: 'H' },
+    'خ': { pronunciation: 'kha', letterName: 'خ', word: 'خروف', meaning: 'Kharuf (Sheep)', english: 'Kh' },
+    'د': { pronunciation: 'dal', letterName: 'د', word: 'دجاجة', meaning: 'Dajaja (Chicken)', english: 'D' },
+    'ذ': { pronunciation: 'thal', letterName: 'ذ', word: 'ذئب', meaning: 'Thib (Wolf)', english: 'Th' },
+    'ر': { pronunciation: 'ra', letterName: 'ر', word: 'رمان', meaning: 'Rumman (Pomegranate)', english: 'R' },
+    'ز': { pronunciation: 'zay', letterName: 'ز', word: 'زرافة', meaning: 'Zarafa (Giraffe)', english: 'Z' },
+    'س': { pronunciation: 'seen', letterName: 'س', word: 'سمك', meaning: 'Samak (Fish)', english: 'S' },
+    'ش': { pronunciation: 'sheen', letterName: 'ش', word: 'شمس', meaning: 'Shams (Sun)', english: 'Sh' },
+    'ص': { pronunciation: 'sad', letterName: 'ص', word: 'صقر', meaning: 'Saqr (Falcon)', english: 'S' },
+    'ض': { pronunciation: 'dad', letterName: 'ض', word: 'ضفدع', meaning: 'Difda (Frog)', english: 'D' },
+    'ط': { pronunciation: 'ta', letterName: 'ط', word: 'طائر', meaning: 'Tair (Bird)', english: 'T' },
+    'ظ': { pronunciation: 'za', letterName: 'ظ', word: 'ظبي', meaning: 'Zabi (Deer)', english: 'Z' },
+    'ع': { pronunciation: 'ain', letterName: 'ع', word: 'عنب', meaning: 'Inab (Grapes)', english: 'A' },
+    'غ': { pronunciation: 'ghain', letterName: 'غ', word: 'غراب', meaning: 'Ghurab (Crow)', english: 'Gh' },
+    'ف': { pronunciation: 'fa', letterName: 'ف', word: 'فيل', meaning: 'Feel (Elephant)', english: 'F' },
+    'ق': { pronunciation: 'qaf', letterName: 'ق', word: 'قطة', meaning: 'Qitta (Cat)', english: 'Q' },
+    'ك': { pronunciation: 'kaf', letterName: 'ك', word: 'كلب', meaning: 'Kalb (Dog)', english: 'K' },
+    'ل': { pronunciation: 'lam', letterName: 'ل', word: 'ليمون', meaning: 'Limun (Lemon)', english: 'L' },
+    'م': { pronunciation: 'meem', letterName: 'م', word: 'موز', meaning: 'Muz (Banana)', english: 'M' },
+    'ن': { pronunciation: 'nun', letterName: 'ن', word: 'نجمة', meaning: 'Najma (Star)', english: 'N' },
+    'ه': { pronunciation: 'ha', letterName: 'ه', word: 'هدهد', meaning: 'Hudhud (Hoopoe)', english: 'H' },
+    'و': { pronunciation: 'waw', letterName: 'و', word: 'وردة', meaning: 'Warda (Rose)', english: 'W' },
+    'ي': { pronunciation: 'ya', letterName: 'ي', word: 'يد', meaning: 'Yad (Hand)', english: 'Y' }
+};
+
+// Bangla game variables
+let currentBanglaCategory = 'vowels';
+let currentBanglaLetter = 'অ';
+let banglaScore = 0;
+let banglaGameActive = false;
 
 // Spelling words organized by difficulty
 const spellingWordsByDifficulty = {
@@ -354,6 +706,42 @@ const nurseryRhymes = [
         ],
         animations: ["😊", "👏", "🎉", "😄"],
         duration: 24
+    },
+    {
+        title: "Row Row Row Your Boat",
+        icon: "🚣",
+        lyrics: [
+            { text: "Row", timing: 0 }, { text: "row", timing: 0.6 }, { text: "row", timing: 1.2 }, { text: "your", timing: 1.8 }, { text: "boat", timing: 2.4 },
+            { text: "Gently", timing: 3.5 }, { text: "down", timing: 4.1 }, { text: "the", timing: 4.7 }, { text: "stream", timing: 5.3 },
+            { text: "Merrily", timing: 6.8 }, { text: "merrily", timing: 7.6 }, { text: "merrily", timing: 8.4 }, { text: "merrily", timing: 9.2 },
+            { text: "Life", timing: 10.2 }, { text: "is", timing: 10.6 }, { text: "but", timing: 11 }, { text: "a", timing: 11.4 }, { text: "dream", timing: 11.8 },
+            { text: "Row", timing: 13.5 }, { text: "row", timing: 14.1 }, { text: "row", timing: 14.7 }, { text: "your", timing: 15.3 }, { text: "boat", timing: 15.9 },
+            { text: "Gently", timing: 17 }, { text: "down", timing: 17.6 }, { text: "the", timing: 18.2 }, { text: "stream", timing: 18.8 },
+            { text: "Merrily", timing: 20.3 }, { text: "merrily", timing: 21.1 }, { text: "merrily", timing: 21.9 }, { text: "merrily", timing: 22.7 },
+            { text: "Life", timing: 23.7 }, { text: "is", timing: 24.1 }, { text: "but", timing: 24.5 }, { text: "a", timing: 24.9 }, { text: "dream", timing: 25.3 }
+        ],
+        animations: ["🚣", "🌊", "⛵", "🌈"],
+        duration: 27,
+        key: "C",
+        tempo: 90,
+        chords: [
+            { chord: [261.63, 329.63, 392.00], timing: 0, duration: 6 }, // C major
+            { chord: [392.00, 493.88, 587.33], timing: 6, duration: 6 }, // G major
+            { chord: [261.63, 329.63, 392.00], timing: 12, duration: 6 }, // C major
+            { chord: [349.23, 440.00, 523.25], timing: 18, duration: 4 }, // F major
+            { chord: [261.63, 329.63, 392.00], timing: 22, duration: 5 }  // C major
+        ],
+        melody: [
+            { note: 261.63, timing: 0, duration: 0.5 },    // Row
+            { note: 293.66, timing: 0.6, duration: 0.5 },  // row
+            { note: 329.63, timing: 1.2, duration: 0.5 },  // row
+            { note: 349.23, timing: 1.8, duration: 0.5 },  // your
+            { note: 392.00, timing: 2.4, duration: 1.0 },  // boat
+            { note: 392.00, timing: 3.5, duration: 0.5 },  // Gently
+            { note: 349.23, timing: 4.1, duration: 0.5 },  // down
+            { note: 329.63, timing: 4.7, duration: 0.5 },  // the
+            { note: 293.66, timing: 5.3, duration: 1.4 }   // stream
+        ]
     }
 ];
 
@@ -630,6 +1018,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeAlphabet();
     initializeLowercase();
     initializePhonics();
+    initializeBangla();
+    initializeArabic();
     initializeSpelling();
     initializeCounting();
     initializeQuiz();
@@ -647,6 +1037,11 @@ function showSection(section) {
     });
     document.getElementById(section).classList.add('active');
     currentSection = section;
+    
+    // Initialize specific sections when shown
+    if (section === 'arabic') {
+        initializeArabic();
+    }
     
     // Play sound when switching sections
     playSound('click');
@@ -838,6 +1233,366 @@ function checkPhonicsAnswer(selected, correct, button) {
         btn.disabled = true;
         setTimeout(() => btn.disabled = false, 1500);
     });
+}
+
+// Bangla Letters Section
+function initializeBangla() {
+    generateBanglaGrid();
+    updateBanglaDisplay();
+}
+
+function selectBanglaCategory(category) {
+    // Update active category button
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    currentBanglaCategory = category;
+    currentBanglaLetter = category === 'vowels' ? 'অ' : 'ক';
+    generateBanglaGrid();
+    updateBanglaDisplay();
+    
+    playSound('click');
+    // const categoryName = category === 'vowels' ? 'স্বরবর্ণ' : 'ব্যঞ্জনবর্ণ';
+    // speakBengali(`${categoryName} নির্বাচিত হয়েছে`);
+}
+
+function generateBanglaGrid() {
+    const grid = document.getElementById('banglaGrid');
+    grid.innerHTML = '';
+    
+    const letters = banglaAlphabet[currentBanglaCategory];
+    
+    Object.keys(letters).forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = 'bangla-letter-btn';
+        btn.textContent = letter;
+        btn.onclick = () => selectBanglaLetter(letter);
+        grid.appendChild(btn);
+    });
+}
+
+function selectBanglaLetter(letter) {
+    currentBanglaLetter = letter;
+    updateBanglaDisplay();
+    
+    // Play letter sound with proper Bengali letter name
+    playSound('letter');
+    // const letterData = banglaAlphabet[currentBanglaCategory][letter];
+    // speakBengali(`${letterData.letterName}। ${letterData.word}`);
+}
+
+function updateBanglaDisplay() {
+    const letterData = banglaAlphabet[currentBanglaCategory][currentBanglaLetter];
+    
+    document.getElementById('banglaBigLetter').textContent = currentBanglaLetter;
+    document.getElementById('banglaPronunciation').textContent = `${currentBanglaLetter} (${letterData.pronunciation})`;
+    document.getElementById('banglaWord').textContent = letterData.word;
+    document.getElementById('banglaWordMeaning').textContent = letterData.meaning;
+    
+    // Update image
+    const imageElement = document.getElementById('banglaAlphabetImage');
+    if (imageElement) {
+        imageElement.src = `images/bangla/${currentBanglaLetter}.svg`;
+        imageElement.alt = letterData.word;
+        
+        // Fallback to common word images if letter-specific image doesn't exist
+        imageElement.onerror = function() {
+            // Try with word name instead
+            this.src = `images/bangla/${letterData.word}.svg`;
+            this.onerror = function() {
+                // Final fallback to a default image
+                this.src = `images/bangla/default.svg`;
+                this.onerror = null; // Prevent infinite loop
+            };
+        };
+    }
+}
+
+function playBanglaLetter() {
+    const letterData = banglaAlphabet[currentBanglaCategory][currentBanglaLetter];
+    playSound('letter');
+    // speakBengali(`${letterData.letterName}। ${letterData.word}`, 0.6); // Slower for clear pronunciation
+}
+
+function startBanglaGame() {
+    banglaGameActive = true;
+    document.getElementById('banglaGame').style.display = 'block';
+    generateBanglaQuestion();
+}
+
+function generateBanglaQuestion() {
+    const letters = Object.keys(banglaAlphabet[currentBanglaCategory]);
+    const correctLetter = letters[Math.floor(Math.random() * letters.length)];
+    const letterData = banglaAlphabet[currentBanglaCategory][correctLetter];
+    
+    document.getElementById('banglaGameQuestion').innerHTML = `
+        <div class="question-text">কোনটি "${correctLetter}" (${letterData.pronunciation})?</div>
+    `;
+    
+    // Generate 4 options including the correct answer
+    const options = [correctLetter];
+    while (options.length < 4) {
+        const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+        if (!options.includes(randomLetter)) {
+            options.push(randomLetter);
+        }
+    }
+    
+    // Shuffle options
+    options.sort(() => Math.random() - 0.5);
+    
+    // Create option buttons
+    const optionsContainer = document.getElementById('banglaOptions');
+    optionsContainer.innerHTML = '';
+    
+    options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'bangla-option-btn';
+        btn.textContent = option;
+        btn.onclick = () => checkBanglaAnswer(option, correctLetter, btn);
+        optionsContainer.appendChild(btn);
+    });
+    
+    // Speak the question using proper letter name
+    // speakBengali(`কোনটি ${letterData.letterName}?`);
+}
+
+function checkBanglaAnswer(selected, correct, button) {
+    if (selected === correct) {
+        button.classList.add('correct');
+        banglaScore++;
+        playSound('success');
+        // speakBengali('সঠিক! খুব ভালো!');
+        
+        setTimeout(() => {
+            generateBanglaQuestion();
+        }, 1500);
+    } else {
+        button.classList.add('wrong');
+        playSound('error');
+        // const correctData = banglaAlphabet[currentBanglaCategory][correct];
+        // speakBengali(`ভুল! সঠিক উত্তর হলো ${correctData.letterName}। ${correctData.word}`);
+        
+        // Highlight correct answer
+        setTimeout(() => {
+            const correctBtn = Array.from(document.querySelectorAll('.bangla-option-btn'))
+                .find(btn => btn.textContent === correct);
+            if (correctBtn) correctBtn.classList.add('correct');
+        }, 500);
+        
+        setTimeout(() => {
+            generateBanglaQuestion();
+        }, 2500);
+    }
+    
+    // Update score display (convert to Bangla numerals)
+    const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    const banglaScoreText = banglaScore.toString().split('').map(digit => banglaNumbers[parseInt(digit)]).join('');
+    document.getElementById('banglaScore').textContent = banglaScoreText;
+    
+    // Disable all buttons temporarily
+    document.querySelectorAll('.bangla-option-btn').forEach(btn => {
+        btn.disabled = true;
+        setTimeout(() => btn.disabled = false, 1500);
+    });
+}
+
+// Test Bengali voice function
+function testBengaliVoice() {
+    console.log('Testing Bengali voice...');
+    const testText = 'আসসালামু আলাইকুম! আমি বাংলায় কথা বলতে পারি।';
+    // speakBengali(testText);
+    
+    // Also show instructions for installing Bengali voices
+    alert(`Bengali Voice Test
+    
+Text: "${testText}"
+
+If you don't hear Bengali pronunciation:
+
+For Chrome/Edge:
+1. Go to chrome://settings/languages
+2. Add Bengali (বাংলা)
+3. Enable "Use this language for spell check"
+4. Restart browser
+
+For Mac:
+1. System Preferences > Accessibility > Speech
+2. Click "System Voice" > "Customize"
+3. Download Bengali voices
+
+For Windows:
+1. Settings > Time & Language > Speech
+2. Add Bengali language pack
+3. Download Bengali speech voices
+
+The app will work with English pronunciation if Bengali voices aren't available.`);
+}
+
+// Arabic Letters Section
+function initializeArabic() {
+    generateArabicGrid();
+    updateArabicDisplay();
+}
+
+function generateArabicGrid() {
+    const arabicGrid = document.getElementById('arabicGrid');
+    if (!arabicGrid) return;
+    
+    arabicGrid.innerHTML = '';
+    
+    Object.keys(arabicAlphabet).forEach(letter => {
+        const letterBtn = document.createElement('button');
+        letterBtn.className = 'letter-btn arabic-letter-btn';
+        letterBtn.textContent = letter;
+        letterBtn.onclick = () => selectArabicLetter(letter);
+        letterBtn.setAttribute('aria-label', `Arabic letter ${letter}`);
+        arabicGrid.appendChild(letterBtn);
+    });
+}
+
+function selectArabicLetter(letter) {
+    currentArabicLetter = letter;
+    updateArabicDisplay();
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.arabic-letter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Add active class to selected button
+    event.target.classList.add('active');
+}
+
+function updateArabicDisplay() {
+    const letterData = arabicAlphabet[currentArabicLetter];
+    
+    // Update big letter display
+    const bigLetter = document.getElementById('arabicBigLetter');
+    if (bigLetter) bigLetter.textContent = currentArabicLetter;
+    
+    // Update pronunciation
+    const pronunciation = document.getElementById('arabicPronunciation');
+    if (pronunciation) pronunciation.textContent = `${currentArabicLetter} (${letterData.pronunciation})`;
+    
+    // Update word and meaning
+    const word = document.getElementById('arabicWord');
+    if (word) word.textContent = letterData.word;
+    
+    const meaning = document.getElementById('arabicWordMeaning');
+    if (meaning) meaning.textContent = letterData.meaning;
+    
+    // Update image
+    const imageElement = document.getElementById('arabicAlphabetImage');
+    if (imageElement) {
+        imageElement.src = `images/arabic/${currentArabicLetter}.svg`;
+        imageElement.alt = letterData.word;
+        imageElement.onerror = function() {
+            this.src = `images/arabic/${letterData.word}.svg`;
+            this.onerror = function() {
+                this.src = `images/arabic/default.svg`;
+                this.onerror = null;
+            };
+        };
+    }
+}
+
+function playArabicLetter() {
+    const letterData = arabicAlphabet[currentArabicLetter];
+    const textToSpeak = `${letterData.pronunciation}. ${letterData.word}`;
+    
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'ar-SA'; // Arabic Saudi Arabia
+        utterance.rate = 0.8;
+        utterance.pitch = 1.1;
+        
+        // Try to find Arabic voice
+        const voices = window.speechSynthesis.getVoices();
+        const arabicVoice = voices.find(voice => 
+            voice.lang.startsWith('ar') || 
+            voice.name.toLowerCase().includes('arabic')
+        );
+        
+        if (arabicVoice) {
+            utterance.voice = arabicVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function startArabicGame() {
+    const gameDiv = document.getElementById('arabicGame');
+    if (!gameDiv) return;
+    
+    arabicGameActive = true;
+    gameDiv.style.display = 'block';
+    generateArabicQuestion();
+}
+
+function generateArabicQuestion() {
+    const letters = Object.keys(arabicAlphabet);
+    const correctLetter = letters[Math.floor(Math.random() * letters.length)];
+    const questionDiv = document.getElementById('arabicGameQuestion');
+    const optionsDiv = document.getElementById('arabicOptions');
+    
+    if (!questionDiv || !optionsDiv) return;
+    
+    questionDiv.innerHTML = `<div class="question-text">أين "${correctLetter}"؟</div>`;
+    
+    // Generate wrong answers
+    const wrongAnswers = letters.filter(l => l !== correctLetter)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+    
+    const allOptions = [correctLetter, ...wrongAnswers].sort(() => Math.random() - 0.5);
+    
+    optionsDiv.innerHTML = '';
+    allOptions.forEach(letter => {
+        const button = document.createElement('button');
+        button.className = 'option-btn arabic-option-btn';
+        button.textContent = letter;
+        button.onclick = () => checkArabicAnswer(letter, correctLetter, button);
+        optionsDiv.appendChild(button);
+    });
+}
+
+function checkArabicAnswer(selected, correct, button) {
+    if (!arabicGameActive) return;
+    
+    const allButtons = document.querySelectorAll('.arabic-option-btn');
+    allButtons.forEach(btn => btn.disabled = true);
+    
+    if (selected === correct) {
+        button.classList.add('correct');
+        arabicGameScore += 10;
+        setTimeout(() => {
+            generateArabicQuestion();
+            allButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'wrong');
+            });
+        }, 1500);
+    } else {
+        button.classList.add('wrong');
+        allButtons.forEach(btn => {
+            if (btn.textContent === correct) {
+                btn.classList.add('correct');
+            }
+        });
+        setTimeout(() => {
+            generateArabicQuestion();
+            allButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'wrong');
+            });
+        }, 2000);
+    }
+    
+    // Update score display
+    const scoreElement = document.getElementById('arabicScore');
+    if (scoreElement) scoreElement.textContent = arabicGameScore.toString();
 }
 
 // Spelling Section
@@ -1174,13 +1929,13 @@ function playTone(ctx, frequency, volume, duration, type = 'sine', delay = 0) {
 }
 
 // Enhanced text to speech with better voice selection
-function speak(text) {
+function speak(text, rate = 0.85) {
     if ('speechSynthesis' in window) {
         // Cancel any ongoing speech
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.85; // Slightly slower for toddlers
+        utterance.rate = rate; // Adjustable rate
         utterance.pitch = 1.1; // Natural pitch
         utterance.volume = 0.9;
         
@@ -1212,11 +1967,139 @@ function speak(text) {
     }
 }
 
-// Load voices when ready
+// Bengali text to speech with better voice detection
+function speakBengali(text, rate = 0.7) {
+    if ('speechSynthesis' in window) {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+        
+        // Force reload voices if empty
+        let voices = window.speechSynthesis.getVoices();
+        if (voices.length === 0) {
+            // Wait a bit and try again
+            setTimeout(() => speakBengali(text, rate), 100);
+            return;
+        }
+        
+        console.log('All available voices:', voices.map(v => `${v.name} (${v.lang})`));
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = rate;
+        utterance.pitch = 1.0;
+        utterance.volume = 0.9;
+        
+        // Try to find Bengali voices (more comprehensive search)
+        let selectedVoice = null;
+        
+        // First try: Bengali voices
+        const bengaliVoices = voices.filter(voice => 
+            voice.lang.toLowerCase().includes('bn') || 
+            voice.name.toLowerCase().includes('bengali') ||
+            voice.name.toLowerCase().includes('bangla')
+        );
+        
+        if (bengaliVoices.length > 0) {
+            selectedVoice = bengaliVoices[0];
+            utterance.lang = 'bn-BD';
+            console.log('Using Bengali voice:', selectedVoice.name);
+        } else {
+            // Second try: Hindi/Urdu voices (similar phonetics)
+            const indianVoices = voices.filter(voice =>
+                voice.lang.toLowerCase().includes('hi') || 
+                voice.lang.toLowerCase().includes('ur') ||
+                voice.name.toLowerCase().includes('hindi') ||
+                voice.name.toLowerCase().includes('indian')
+            );
+            
+            if (indianVoices.length > 0) {
+                selectedVoice = indianVoices[0];
+                utterance.lang = 'hi-IN'; // Use Hindi but it can handle some Bengali
+                console.log('Using Hindi voice for Bengali:', selectedVoice.name);
+            } else {
+                // Third try: Any female voice (better for children)
+                const femaleVoices = voices.filter(voice =>
+                    voice.name.toLowerCase().includes('female') ||
+                    voice.name.toLowerCase().includes('woman') ||
+                    voice.name.toLowerCase().includes('samantha') ||
+                    voice.name.toLowerCase().includes('zira')
+                );
+                
+                if (femaleVoices.length > 0) {
+                    selectedVoice = femaleVoices[0];
+                    console.log('Using female voice for Bengali:', selectedVoice.name);
+                } else {
+                    // Last resort: use first available voice
+                    selectedVoice = voices[0];
+                    console.log('Using default voice for Bengali:', selectedVoice.name);
+                }
+                utterance.lang = 'bn-BD'; // Still try Bengali language
+            }
+        }
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        // Add visual feedback when speaking
+        utterance.onstart = () => {
+            document.body.classList.add('speaking');
+            console.log('Speaking Bengali text:', text);
+        };
+        
+        utterance.onend = () => {
+            document.body.classList.remove('speaking');
+        };
+        
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event.error);
+            document.body.classList.remove('speaking');
+        };
+        
+        window.speechSynthesis.speak(utterance);
+    } else {
+        console.log('Speech synthesis not supported, text was:', text);
+    }
+}
+
+// Load voices when ready with better detection
 if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = () => {
-        // Voices loaded
-    };
+    let voicesLoaded = false;
+    
+    function loadVoices() {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0 && !voicesLoaded) {
+            voicesLoaded = true;
+            console.log(`Loaded ${voices.length} voices total`);
+            
+            // List Bengali voices
+            const bengaliVoices = voices.filter(voice => 
+                voice.lang.toLowerCase().includes('bn') || 
+                voice.name.toLowerCase().includes('bengali') ||
+                voice.name.toLowerCase().includes('bangla')
+            );
+            console.log('Available Bengali voices:', bengaliVoices.length > 0 ? bengaliVoices.map(v => v.name) : 'None found');
+            
+            // List Hindi voices as fallback
+            const hindiVoices = voices.filter(voice => 
+                voice.lang.toLowerCase().includes('hi') || 
+                voice.name.toLowerCase().includes('hindi')
+            );
+            console.log('Available Hindi voices (fallback):', hindiVoices.length > 0 ? hindiVoices.map(v => v.name) : 'None found');
+            
+            // List all available languages
+            const languages = [...new Set(voices.map(v => v.lang))].sort();
+            console.log('All available languages:', languages);
+        }
+    }
+    
+    // Try multiple ways to load voices
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    
+    // Also try loading immediately (some browsers need this)
+    loadVoices();
+    
+    // And try after a short delay
+    setTimeout(loadVoices, 500);
 }
 
 // Quiz Section Functions

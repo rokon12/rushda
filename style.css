@@ -292,6 +292,487 @@ nav {
     font-weight: bold;
 }
 
+/* Bangla Letters Section */
+.bangla-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.bangla-category-selector {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    background: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+    font-size: 1.1em;
+}
+
+.category-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.category-btn.active {
+    background: #d35400;
+    transform: scale(1.05);
+}
+
+.category-desc {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+.bangla-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 15px;
+    background: #f8f9fa;
+}
+
+.bangla-letter-btn {
+    background: #16a085;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 10px;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-letter-btn:hover {
+    background: #138d75;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+}
+
+.bangla-display {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 3px solid #e67e22;
+}
+
+.bangla-big-letter {
+    font-size: 5em;
+    font-weight: bold;
+    color: #e67e22;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-letter-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bangla-letter-image img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.bangla-letter-image:hover img {
+    transform: scale(1.1);
+}
+
+.bangla-pronunciation {
+    font-size: 1.5em;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.bangla-word-section {
+    margin-bottom: 25px;
+}
+
+.bangla-word {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-word-meaning {
+    font-size: 1.3em;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.bangla-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.play-bangla-btn, .practice-bangla-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.test-voice-btn {
+    background: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.play-bangla-btn:hover, .practice-bangla-btn:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.test-voice-btn:hover {
+    background: #8e44ad;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.bangla-game {
+    background: #fdf2e9;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 3px solid #e67e22;
+}
+
+.bangla-game h3 {
+    color: #2c3e50;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-game-question {
+    margin-bottom: 25px;
+}
+
+.bangla-game-question .question-text {
+    font-size: 1.6em;
+    color: #e67e22;
+    font-weight: bold;
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.bangla-option-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 25px 15px;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.bangla-option-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.bangla-option-btn.correct {
+    background: #27ae60;
+    animation: bounce 0.5s;
+}
+
+.bangla-option-btn.wrong {
+    background: #e74c3c;
+    animation: shake 0.5s;
+}
+
+.bangla-score {
+    font-size: 1.5em;
+    color: #2c3e50;
+    font-weight: bold;
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+/* Arabic Letters Section */
+.arabic-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    direction: rtl; /* Right-to-left for Arabic */
+}
+
+.arabic-greeting {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e8f5e8 0%, #f3e5f5 100%);
+    border-radius: 15px;
+}
+
+.arabic-greeting h3 {
+    font-size: 1.8em;
+    color: #2e7d32;
+    margin-bottom: 10px;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-greeting p {
+    font-size: 1.2em;
+    color: #666;
+    direction: ltr; /* Left-to-right for English text */
+}
+
+.arabic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+    direction: ltr; /* Grid flows left-to-right */
+}
+
+.arabic-letter-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 20px;
+    font-size: 2em;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-letter-btn:hover {
+    background: #66bb6a;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.arabic-letter-btn.active {
+    background: #2e7d32;
+    transform: scale(1.1);
+}
+
+.arabic-display {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.arabic-big-letter {
+    font-size: 8em;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-letter-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arabic-letter-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.arabic-letter-image:hover img {
+    transform: scale(1.05);
+}
+
+.arabic-pronunciation {
+    font-size: 1.8em;
+    color: #666;
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-word-section {
+    margin-bottom: 30px;
+}
+
+.arabic-word {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 10px;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-word-meaning {
+    font-size: 1.3em;
+    color: #666;
+    direction: ltr; /* English translation left-to-right */
+}
+
+.arabic-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.play-arabic-btn, .practice-arabic-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.play-arabic-btn:hover, .practice-arabic-btn:hover {
+    background: #66bb6a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.arabic-game {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    direction: rtl;
+}
+
+.arabic-game h3 {
+    font-size: 2em;
+    color: #2e7d32;
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-game-question {
+    margin-bottom: 30px;
+}
+
+.arabic-game-question .question-text {
+    font-size: 1.8em;
+    color: #333;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    direction: ltr; /* Grid flows left-to-right */
+}
+
+.arabic-option-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 20px;
+    font-size: 2em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
+.arabic-option-btn:hover {
+    background: #66bb6a;
+    transform: translateY(-2px);
+}
+
+.arabic-option-btn.correct {
+    background: #4caf50;
+    animation: bounce 0.6s;
+}
+
+.arabic-option-btn.wrong {
+    background: #f44336;
+    animation: shake 0.6s;
+}
+
+.arabic-score {
+    font-size: 1.5em;
+    color: #2c3e50;
+    font-weight: bold;
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+}
+
 .letter-btn {
     background: #4ecdc4;
     color: white;
