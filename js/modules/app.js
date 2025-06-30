@@ -62,6 +62,12 @@ function showSection(section) {
     const currentActive = document.querySelector('.learning-section.active');
     const targetSection = document.getElementById(section);
 
+    // Check if targetSection exists
+    if (!targetSection) {
+        console.error(`Section with ID "${section}" not found`);
+        return;
+    }
+
     if (currentActive && currentActive !== targetSection) {
         // Add exit animation to current section
         currentActive.classList.add('slide-out-left');
@@ -2291,14 +2297,36 @@ function clearCanvas() {
 }
 
 function saveDrawing() {
-    const link = document.createElement('a');
-    link.download = `drawing-${Date.now()}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+    try {
+        // Create a new canvas to avoid clipboard API issues
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(canvas, 0, 0);
 
-    celebrate();
-    playSound('success');
-    speak('Your drawing has been saved!');
+        const link = document.createElement('a');
+        link.download = `drawing-${Date.now()}.png`;
+
+        // Use toBlob instead of toDataURL to avoid clipboard API issues
+        tempCanvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.click();
+
+            // Clean up
+            setTimeout(function() {
+                URL.revokeObjectURL(url);
+            }, 100);
+        });
+
+        celebrate();
+        playSound('success');
+        speak('Your drawing has been saved!');
+    } catch (error) {
+        console.error('Error saving drawing:', error);
+        speak('Sorry, there was a problem saving your drawing.');
+    }
 }
 
 function loadTemplate() {
