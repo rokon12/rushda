@@ -1986,26 +1986,101 @@ function updateArabicDisplay() {
 
 function playArabicLetter() {
     const letterData = arabicAlphabet[currentArabicLetter];
-    const textToSpeak = `${letterData.pronunciation}. ${letterData.word}`;
-
+    
     if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = 'ar-SA'; // Arabic Saudi Arabia
-        utterance.rate = 0.8;
-        utterance.pitch = 1.1;
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+        
+        // Function to get voices with retry
+        const getVoicesWithRetry = () => {
+            return new Promise((resolve) => {
+                let voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    resolve(voices);
+                } else {
+                    // Wait for voices to load
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        voices = window.speechSynthesis.getVoices();
+                        resolve(voices);
+                    };
+                    // Fallback timeout
+                    setTimeout(() => resolve([]), 1000);
+                }
+            });
+        };
+        
+        getVoicesWithRetry().then(voices => {
+            // First, speak the Arabic letter
+            const letterUtterance = new SpeechSynthesisUtterance(currentArabicLetter);
+            letterUtterance.lang = 'ar-SA'; // Arabic Saudi Arabia
+            letterUtterance.rate = 0.6; // Slower for clarity
+            letterUtterance.pitch = 1.1;
+            letterUtterance.volume = 1.0;
+            
+            // Then speak the word in Arabic
+            const wordUtterance = new SpeechSynthesisUtterance(letterData.word);
+            wordUtterance.lang = 'ar-SA';
+            wordUtterance.rate = 0.7;
+            wordUtterance.pitch = 1.1;
+            wordUtterance.volume = 1.0;
+            
+            // Finally, speak the English meaning
+            const meaningUtterance = new SpeechSynthesisUtterance(letterData.meaning);
+            meaningUtterance.lang = 'en-US';
+            meaningUtterance.rate = 0.9;
+            meaningUtterance.pitch = 1.1;
+            meaningUtterance.volume = 1.0;
 
-        // Try to find Arabic voice
-        const voices = window.speechSynthesis.getVoices();
-        const arabicVoice = voices.find(voice => 
-            voice.lang.startsWith('ar') || 
-            voice.name.toLowerCase().includes('arabic')
-        );
+            // Try to find Arabic voice
+            const arabicVoice = voices.find(voice => 
+                voice.lang.startsWith('ar') || 
+                voice.name.toLowerCase().includes('arabic')
+            );
+            
+            const englishVoice = voices.find(voice => 
+                voice.lang.startsWith('en')
+            );
 
-        if (arabicVoice) {
-            utterance.voice = arabicVoice;
-        }
+            if (arabicVoice) {
+                letterUtterance.voice = arabicVoice;
+                wordUtterance.voice = arabicVoice;
+                console.log('Using Arabic voice:', arabicVoice.name);
+            } else {
+                console.log('No Arabic voice found, using default');
+            }
+            
+            if (englishVoice) {
+                meaningUtterance.voice = englishVoice;
+            }
 
-        window.speechSynthesis.speak(utterance);
+            // Log for debugging
+            console.log('Playing Arabic letter:', currentArabicLetter, 'Word:', letterData.word);
+
+            // Speak in sequence
+            window.speechSynthesis.speak(letterUtterance);
+            
+            letterUtterance.onend = () => {
+                setTimeout(() => {
+                    window.speechSynthesis.speak(wordUtterance);
+                }, 300);
+            };
+            
+            wordUtterance.onend = () => {
+                setTimeout(() => {
+                    window.speechSynthesis.speak(meaningUtterance);
+                }, 500);
+            };
+            
+            // Error handling
+            letterUtterance.onerror = (event) => {
+                console.error('Speech error:', event);
+                // Fallback to basic speak function
+                speak(`${currentArabicLetter}. ${letterData.word}. ${letterData.meaning}`);
+            };
+        });
+    } else {
+        console.error('Speech synthesis not supported');
+        alert('Your browser does not support text-to-speech. Please try a different browser.');
     }
 }
 

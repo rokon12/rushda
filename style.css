@@ -1307,7 +1307,7 @@ nav {
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 15px;
     margin-bottom: 40px;
-    direction: ltr; /* Grid flows left-to-right */
+    direction: rtl; /* Grid flows right-to-left for Arabic */
 }
 
 .arabic-letter-btn {
