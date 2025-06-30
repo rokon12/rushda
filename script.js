@@ -139,6 +139,30 @@ const alphabetData = {
     'Y': 'Yacht', 'Z': 'Zebra'
 };
 
+// Phonics data
+const phonicsData = {
+    consonants: ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'],
+    vowels: {
+        'a': { sound: 'ah', description: 'makes "ah" sound' },
+        'e': { sound: 'eh', description: 'makes "eh" sound' },
+        'i': { sound: 'ih', description: 'makes "ih" sound' },
+        'o': { sound: 'oh', description: 'makes "oh" sound' },
+        'u': { sound: 'uh', description: 'makes "uh" sound' }
+    },
+    consonantSounds: {
+        'B': 'buh', 'C': 'kuh', 'D': 'duh', 'F': 'fuh', 'G': 'guh', 'H': 'huh',
+        'J': 'juh', 'K': 'kuh', 'L': 'luh', 'M': 'muh', 'N': 'nuh', 'P': 'puh',
+        'Q': 'kwuh', 'R': 'ruh', 'S': 'suh', 'T': 'tuh', 'V': 'vuh', 'W': 'wuh',
+        'X': 'ksuh', 'Y': 'yuh', 'Z': 'zuh'
+    }
+};
+
+// Phonics game variables
+let currentVowel = 'a';
+let currentConsonant = 'B';
+let phonicsScore = 0;
+let phonicsGameActive = false;
+
 // Spelling words organized by difficulty
 const spellingWordsByDifficulty = {
     easy: [
@@ -604,6 +628,8 @@ const interactiveStories = [
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     initializeAlphabet();
+    initializeLowercase();
+    initializePhonics();
     initializeSpelling();
     initializeCounting();
     initializeQuiz();
@@ -649,6 +675,169 @@ function showLetter(letter) {
     // Play letter sound
     playSound('letter');
     speak(`${letter} is for ${alphabetData[letter]}`);
+}
+
+// Lowercase Letters Section
+function initializeLowercase() {
+    const grid = document.getElementById('lowercaseGrid');
+    grid.innerHTML = '';
+    
+    for (let letter in alphabetData) {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.textContent = letter.toLowerCase();
+        btn.onclick = () => showLowercaseLetter(letter.toLowerCase());
+        grid.appendChild(btn);
+    }
+}
+
+function showLowercaseLetter(letter) {
+    const uppercaseLetter = letter.toUpperCase();
+    document.getElementById('lowercaseBigLetter').textContent = letter;
+    document.getElementById('lowercaseLetterWord').textContent = `${letter} is for ${alphabetData[uppercaseLetter].toLowerCase()}`;
+    document.getElementById('lowercaseAlphabetImage').src = `images/${letter}.svg`;
+    document.getElementById('lowercaseAlphabetImage').alt = alphabetData[uppercaseLetter];
+    
+    // Play letter sound
+    playSound('letter');
+    speak(`${letter} is for ${alphabetData[uppercaseLetter].toLowerCase()}`);
+}
+
+// Phonics Section
+function initializePhonics() {
+    generateConsonantGrid();
+    updatePhonicsDisplay();
+}
+
+function generateConsonantGrid() {
+    const grid = document.getElementById('consonantGrid');
+    grid.innerHTML = '';
+    
+    phonicsData.consonants.forEach(consonant => {
+        const btn = document.createElement('button');
+        btn.className = 'consonant-btn';
+        btn.textContent = consonant + currentVowel.toLowerCase();
+        btn.onclick = () => selectConsonant(consonant);
+        grid.appendChild(btn);
+    });
+}
+
+function selectVowel(vowel) {
+    // Update active vowel button
+    document.querySelectorAll('.vowel-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-vowel="${vowel}"]`).classList.add('active');
+    
+    currentVowel = vowel;
+    generateConsonantGrid();
+    updatePhonicsDisplay();
+    
+    // Play vowel sound
+    playSound('click');
+    speak(`${vowel.toUpperCase()} ${phonicsData.vowels[vowel].description}`);
+}
+
+function selectConsonant(consonant) {
+    currentConsonant = consonant;
+    updatePhonicsDisplay();
+    
+    // Play consonant-vowel combination
+    playSound('click');
+    const combination = consonant + currentVowel.toLowerCase();
+    speak(`${consonant} ${phonicsData.consonantSounds[consonant]} with ${currentVowel.toUpperCase()} ${phonicsData.vowels[currentVowel].sound} makes ${combination}`);
+}
+
+function updatePhonicsDisplay() {
+    const combination = currentConsonant + currentVowel.toLowerCase();
+    document.getElementById('currentSound').textContent = combination;
+    
+    const description = `${currentConsonant} makes "${phonicsData.consonantSounds[currentConsonant]}" sound with ${currentVowel.toUpperCase()} makes "${phonicsData.vowels[currentVowel].sound}" = "${combination}"`;
+    document.getElementById('soundDescription').textContent = description;
+}
+
+function playCurrentSound() {
+    const combination = currentConsonant + currentVowel.toLowerCase();
+    playSound('letter');
+    speak(combination, 0.8); // Slower speech for pronunciation
+}
+
+function startPhonicsGame() {
+    phonicsGameActive = true;
+    document.getElementById('phonicsGame').style.display = 'block';
+    generatePhonicsQuestion();
+}
+
+function generatePhonicsQuestion() {
+    // Pick a random consonant and vowel
+    const randomConsonant = phonicsData.consonants[Math.floor(Math.random() * phonicsData.consonants.length)];
+    const randomVowel = Object.keys(phonicsData.vowels)[Math.floor(Math.random() * 5)];
+    const correctAnswer = randomConsonant + randomVowel;
+    
+    document.getElementById('gameQuestion').textContent = `Find "${correctAnswer}"`;
+    
+    // Generate 4 options including the correct answer
+    const options = [correctAnswer];
+    while (options.length < 4) {
+        const randomC = phonicsData.consonants[Math.floor(Math.random() * phonicsData.consonants.length)];
+        const randomV = Object.keys(phonicsData.vowels)[Math.floor(Math.random() * 5)];
+        const option = randomC + randomV;
+        if (!options.includes(option)) {
+            options.push(option);
+        }
+    }
+    
+    // Shuffle options
+    options.sort(() => Math.random() - 0.5);
+    
+    // Create option buttons
+    const optionsContainer = document.getElementById('soundOptions');
+    optionsContainer.innerHTML = '';
+    
+    options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = option;
+        btn.onclick = () => checkPhonicsAnswer(option, correctAnswer, btn);
+        optionsContainer.appendChild(btn);
+    });
+    
+    // Speak the question
+    speak(`Find ${correctAnswer}`);
+}
+
+function checkPhonicsAnswer(selected, correct, button) {
+    if (selected === correct) {
+        button.classList.add('correct');
+        phonicsScore++;
+        playSound('success');
+        speak('Correct! Great job!');
+        
+        setTimeout(() => {
+            generatePhonicsQuestion();
+        }, 1500);
+    } else {
+        button.classList.add('wrong');
+        playSound('error');
+        speak(`Not quite! The answer is ${correct}`);
+        
+        // Highlight correct answer
+        setTimeout(() => {
+            const correctBtn = Array.from(document.querySelectorAll('.option-btn'))
+                .find(btn => btn.textContent === correct);
+            if (correctBtn) correctBtn.classList.add('correct');
+        }, 500);
+        
+        setTimeout(() => {
+            generatePhonicsQuestion();
+        }, 2500);
+    }
+    
+    document.getElementById('phonicsScore').textContent = phonicsScore;
+    
+    // Disable all buttons temporarily
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.disabled = true;
+        setTimeout(() => btn.disabled = false, 1500);
+    });
 }
 
 // Spelling Section

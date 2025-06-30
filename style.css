@@ -93,6 +93,205 @@ nav {
     margin-bottom: 40px;
 }
 
+/* Lowercase letters section uses same grid style */
+#lowercaseGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+/* Phonics Section */
+.phonics-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.vowel-selector {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.vowel-selector h3 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.vowel-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.vowel-btn {
+    background: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.vowel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.vowel-btn.active {
+    background: #8e44ad;
+    transform: scale(1.1);
+}
+
+.vowel-letter {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.vowel-sound {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.consonant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.consonant-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.consonant-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.phonics-display {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.current-sound {
+    font-size: 4em;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.sound-description {
+    font-size: 1.3em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.play-sound-btn, .practice-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.play-sound-btn:hover, .practice-btn:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.phonics-game {
+    background: #fff3cd;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 3px solid #ffeaa7;
+}
+
+.phonics-game h3 {
+    color: #2c3e50;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.game-question {
+    font-size: 2em;
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.sound-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.option-btn {
+    background: #74b9ff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.option-btn:hover {
+    background: #0984e3;
+    transform: translateY(-2px);
+}
+
+.option-btn.correct {
+    background: #00b894;
+    animation: bounce 0.5s;
+}
+
+.option-btn.wrong {
+    background: #e17055;
+    animation: shake 0.5s;
+}
+
+.game-score {
+    font-size: 1.5em;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
 .letter-btn {
     background: #4ecdc4;
     color: white;
